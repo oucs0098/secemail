@@ -1,0 +1,15 @@
+<BODY>
+<p>A package containing classes for managing local keys and connecting to remote key servers.</p>
+<p>All classes are derived from the abstract class {@link core.keyhandlers.KeyHandler} that defines
+a common interface for fetching keys from different sources - files on disk, remote servers etc...</p>
+<p>From this class, two more abstract classes are defined; {@link core.keyhandlers.KeyFile} and {@link core.keyhandlers.KeyServer}
+which define extra functionality for key files and key servers respectively.</p>
+<p><b>Steps to add a new key handler:</b></p>
+<ol>
+  <li>Create the key handler class & implement the required methods.</li>
+  <li>Modify {@link core.keyhandlers.KeyHandler#loadKeysourceList(ConfigurationData, String) } to support the necessary type if necessary (don't forget to update app/doc-files/SystemConfigurationSettings.html if necessary). This should
+      only be necessary if the class isn't instanciated with the standard key file or key server constructor format.</li>
+  <li>Modify the key management UI routines.</li>
+</ol>
+@author Marcus Povey
+</BODY>

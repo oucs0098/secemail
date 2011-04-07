@@ -1,0 +1,325 @@
+<!-- saved from url=(0022)http://internet.e-mail -->
+<title>System Configuration Settings</title>
+<body bgcolor="#FFFFFF">
+<h1>System Configuration Settings</h1>
+<p>These are settings that can be used to configure various aspects of the email 
+  proxy system. These settings are loaded by the EmailProxy program on startup 
+  from the specified file.</p>
+<table width="100%" border="1" cellspacing="0" cellpadding="0">
+  <tr valign="top" bgcolor="#999999"> 
+    <th>Variable</th>
+    <th> 
+      <div align="center">Default value</div>
+    </th>
+    <th>Description</th>
+  </tr>
+  <tr valign="top"> 
+    <td><font face="Courier New, Courier, mono">proxyserver.outgoing.port</font></td>
+    <td> 
+      <div align="center"><font face="Courier New, Courier, mono">25</font></div>
+    </td>
+    <td>The local port the proxy listens to for outgoing (SMTP) mail.</td>
+  </tr>
+  <tr valign="top"> 
+    <td><font face="Courier New, Courier, mono">proxyserver.incoming.port</font></td>
+    <td> 
+      <div align="center"><font face="Courier New, Courier, mono">110</font></div>
+    </td>
+    <td>The local port the proxy listens to for incoming mail.</td>
+  </tr>
+  <tr valign="top"> 
+    <td><font face="Courier New, Courier, mono">proxyserver.auth.require</font></td>
+    <td> 
+      <div align="center"><font face="Courier New, Courier, mono">1</font></div>
+    </td>
+    <td>Should the proxy server require an SMTP Auth logon (recommended). "1" 
+      for yes "0" for no.</td>
+  </tr>
+  <tr valign="top"> 
+    <td><font face="Courier New, Courier, mono">proxyserver.auth.username</font></td>
+    <td> 
+      <div align="center"><font face="Courier New, Courier, mono"><i>undefined</i></font></div>
+    </td>
+    <td>The username the proxy server will expect.</td>
+  </tr>
+  <tr valign="top"> 
+    <td><font face="Courier New, Courier, mono">proxyserver.auth.passcode</font></td>
+    <td> 
+      <div align="center"><font face="Courier New, Courier, mono"><i>undefined</i></font></div>
+    </td>
+    <td>An MD5 hash of the auth passcode.</td>
+  </tr>
+  <tr valign="top"> 
+    <td><font face="Courier New, Courier, mono"></font></td>
+    <td> 
+      <div align="center"><font face="Courier New, Courier, mono"></font></div>
+    </td>
+    <td>&nbsp;</td>
+  </tr>
+  <tr valign="top" bgcolor="#dddddd"> 
+    <td><font face="Courier New, Courier, mono">algorithm</font></td>
+    <td> 
+      <div align="center"><font face="Courier New, Courier, mono">openpgp</font></div>
+    </td>
+    <td>What algorithm should be used for encryption and signing (used for future 
+      expansion). This also governs the dialog class used for key management.</td>
+  </tr>
+  <tr valign="top"> 
+    <td><font face="Courier New, Courier, mono"></font></td>
+    <td> 
+      <div align="center"><font face="Courier New, Courier, mono"></font></div>
+    </td>
+    <td>&nbsp;</td>
+  </tr>
+  <tr valign="top"> 
+    <td><font face="Courier New, Courier, mono">mailserver.outgoing.address</font></td>
+    <td> 
+      <div align="center"><font face="Courier New, Courier, mono"><i>undefined</i></font></div>
+    </td>
+    <td>The address of the remote email server to connect to to send outgoing 
+      SMTP email.</td>
+  </tr>
+  <tr valign="top"> 
+    <td><font face="Courier New, Courier, mono">mailserver.outgoing.port</font></td>
+    <td> 
+      <div align="center"><font face="Courier New, Courier, mono">25</font></div>
+    </td>
+    <td>The port on the remote email server to connect to.</td>
+  </tr>
+  <tr valign="top"> 
+    <td><font face="Courier New, Courier, mono">mailserver.outgoing.auth.require</font></td>
+    <td> 
+      <div align="center"><font face="Courier New, Courier, mono">0</font></div>
+    </td>
+    <td>If the mail server supports SMTP auth you can enable support here. "1" 
+      for yes "0" for no.</td>
+  </tr>
+  <tr valign="top"> 
+    <td><font face="Courier New, Courier, mono">mailserver.outgoing.auth.username</font></td>
+    <td> 
+      <div align="center"><font face="Courier New, Courier, mono"><i>undefined</i></font></div>
+    </td>
+    <td>The username to use</td>
+  </tr>
+  <tr valign="top"> 
+    <td><font face="Courier New, Courier, mono">mailserver.outgoing.auth.passcode</font></td>
+    <td> 
+      <div align="center"><font face="Courier New, Courier, mono"><i>undefined</i></font></div>
+    </td>
+    <td>An MD5 hash of the auth passcode.</td>
+  </tr>
+  <tr valign="top"> 
+    <td><font face="Courier New, Courier, mono">mailserver.incoming.address</font></td>
+    <td> 
+      <div align="center"><font face="Courier New, Courier, mono"><i>undefined</i></font></div>
+    </td>
+    <td>The address of the remote email server to connect to to get incoming email.</td>
+  </tr>
+  <tr valign="top"> 
+    <td><font face="Courier New, Courier, mono">mailserver.incoming.port</font></td>
+    <td> 
+      <div align="center"><font face="Courier New, Courier, mono">110</font></div>
+    </td>
+    <td>The port on the remote email server to connect to.</td>
+  </tr>
+  <tr valign="top"> 
+    <td><font face="Courier New, Courier, mono">mailserver.incoming.protocol.available</font></td>
+    <td> 
+      <div align="center"><font face="Courier New, Courier, mono">POP3</font></div>
+    </td>
+    <td>The type of mail servers available.</td>
+  </tr>
+  <tr valign="top"> 
+    <td><font face="Courier New, Courier, mono">mailserver.incoming.protocol.used</font></td>
+    <td> 
+      <div align="center"><font face="Courier New, Courier, mono">POP3</font></div>
+    </td>
+    <td>The type of mail server.</td>
+  </tr>
+  <tr valign="top"> 
+    <td><font face="Courier New, Courier, mono"></font></td>
+    <td> 
+      <div align="center"><font face="Courier New, Courier, mono"><font face="Courier New, Courier, mono"></font></font></div>
+    </td>
+    <td>&nbsp;</td>
+  </tr>
+  <tr valign="top" bgcolor="#dddddd"> 
+    <td><font face="Courier New, Courier, mono">openpgp.signaturealgorithm.available</font></td>
+    <td> 
+      <div align="center"><font face="Courier New, Courier, mono">DSA, RSA</font></div>
+    </td>
+    <td>Signature algorithms available.</td>
+  </tr>
+  <tr valign="top" bgcolor="#dddddd"> 
+    <td><font face="Courier New, Courier, mono">openpgp.pkalgorithm.available</font></td>
+    <td> 
+      <div align="center"><font face="Courier New, Courier, mono">RSA</font></div>
+    </td>
+    <td>Public key algorithms available.</td>
+  </tr>
+  <tr valign="top" bgcolor="#dddddd"> 
+    <td><font face="Courier New, Courier, mono">openpgp.symmetricalgorithm.available</font></td>
+    <td> 
+      <div align="center"><font face="Courier New, Courier, mono">IDEA, CAST5, 
+        3DES </font></div>
+    </td>
+    <td>Symmetric algorithms available.</td>
+  </tr>
+  <tr valign="top" bgcolor="#dddddd"> 
+    <td><font face="Courier New, Courier, mono">openpgp.symmetricalgorithm.used</font></td>
+    <td> 
+      <div align="center"><font face="Courier New, Courier, mono">IDEA</font></div>
+    </td>
+    <td>Symmetric algorithm used.</td>
+  </tr>
+  <tr valign="top" bgcolor="#dddddd"> 
+    <td><font face="Courier New, Courier, mono">openpgp.encryptalloutgoingemail</font></td>
+    <td> 
+      <div align="center"><font face="Courier New, Courier, mono">1</font></div>
+    </td>
+    <td>Should the email proxy attempt to encrypt all outgoing mail? "1" for yes 
+      "0" for no.</td>
+  </tr>
+  <tr valign="top" bgcolor="#dddddd"> 
+    <td><font face="Courier New, Courier, mono">openpgp.signalloutgoingemail</font></td>
+    <td> 
+      <div align="center"><font face="Courier New, Courier, mono">1</font></div>
+    </td>
+    <td>Should the proxy server sign all outgoing email using your private key? 
+      "1" for yes, "0" for no.</td>
+  </tr>
+  <tr valign="top"> 
+    <td><font face="Courier New, Courier, mono"></font></td>
+    <td> 
+      <div align="center"><font face="Courier New, Courier, mono"></font></div>
+    </td>
+    <td>&nbsp;</td>
+  </tr>
+  <tr valign="top"> 
+    <td><font face="Courier New, Courier, mono">keymanager.openpgp.primary.secring</font></td>
+    <td> 
+      <div align="center"><font face="Courier New, Courier, mono">secring.pgp</font></div>
+    </td>
+    <td>The path and filename of the primary secret keyring</td>
+  </tr>
+  <tr valign="top"> 
+    <td><font face="Courier New, Courier, mono">keymanager.openpgp.primary.pubring</font></td>
+    <td> 
+      <div align="center"><font face="Courier New, Courier, mono">pubring.pgp</font></div>
+    </td>
+    <td>The path and filename of the primary public keyring</td>
+  </tr>
+  <tr valign="top"> 
+    <td><font face="Courier New, Courier, mono">keymanager.openpgp.keygen.default.signing</font></td>
+    <td> 
+      <div align="center"><font face="Courier New, Courier, mono">RSA</font></div>
+    </td>
+    <td>Default signing algorithm.</td>
+  </tr>
+  <tr valign="top"> 
+    <td><font face="Courier New, Courier, mono">keymanager.openpgp.keygen.default.pk</font></td>
+    <td> 
+      <div align="center"><font face="Courier New, Courier, mono">RSA</font></div>
+    </td>
+    <td>Default public key algorithm.</td>
+  </tr>
+  <tr valign="top"> 
+    <td><font face="Courier New, Courier, mono"></font></td>
+    <td> 
+      <div align="center"><font face="Courier New, Courier, mono"></font></div>
+    </td>
+    <td>&nbsp;</td>
+  </tr>
+  <tr valign="top"> 
+    <td><font face="Courier New, Courier, mono">keymanager.openpgp.publiclist.&lt;n&gt;.type</font></td>
+    <td> 
+      <div align="center"><font face="Courier New, Courier, mono"></font></div>
+    </td>
+    <td>The type of key handler, where &lt;n&gt; represents the priority. The 
+      higher the number the lower the priority. Note, no matter how high a priority 
+      you specify you will never supercede the primary key handlers.
+      <p></p>
+      <p>Type is the class that controls this type. Note, that for security reasons 
+        the class can only be loaded from the core.keyhandler package, and is 
+        prefixed with &quot;core.keyhandler.&quot;</p>
+      <p>Classes do not need the &quot;.class&quot; extension, this is assumed.</p>
+    </td>
+  </tr>
+  <tr valign="top"> 
+    <td><font face="Courier New, Courier, mono">keymanager.openpgp.secretlist.&lt;n&gt;.type</font></td>
+    <td> 
+      <div align="center"><font face="Courier New, Courier, mono"></font></div>
+    </td>
+    <td>
+      <p>The type of key handler, where &lt;n&gt; represents the priority. The 
+        higher the number the lower the priority. Note, no matter how high a priority 
+        you specify you will never supercede the primary key handlers.</p>
+      <p>Type is the class that controls this type. Note, that for security reasons 
+        the class can only be loaded from the core.keyhandler package, and is 
+        prefixed with &quot;core.keyhandler.&quot;</p>
+      <p>Classes do not need the &quot;.class&quot; extension, this is assumed.</p>
+    </td>
+  </tr>
+  <tr valign="top"> 
+    <td><font face="Courier New, Courier, mono">keymanager.openpgp.&lt;list&gt;.&lt;n&gt;.filename</font></td>
+    <td> 
+      <div align="center"><font face="Courier New, Courier, mono"></font></div>
+    </td>
+    <td>The the key handler entry is a file type, this is the filename. Where 
+      &lt;n&gt; is the priority, and &lt;list&gt; is either <font face="Courier New, Courier, mono">secretlist</font> 
+      or <font face="Courier New, Courier, mono">publiclist</font>.</td>
+  </tr>
+  <tr valign="top"> 
+    <td><font face="Courier New, Courier, mono">keymanager.openpgp.&lt;list&gt;.&lt;n&gt;.serveraddress</font></td>
+    <td> 
+      <div align="center"><font face="Courier New, Courier, mono"></font></div>
+    </td>
+    <td>If this is a server, the address of the server.</td>
+  </tr>
+  <tr valign="top"> 
+    <td><font face="Courier New, Courier, mono">keymanager.openpgp.&lt;list&gt;.&lt;n&gt;.serverport</font></td>
+    <td> 
+      <div align="center"><font face="Courier New, Courier, mono"></font></div>
+    </td>
+    <td>If this is a server, the port on the server to connect to.</td>
+  </tr>
+  <tr valign="top"> 
+    <td><font face="Courier New, Courier, mono"></font></td>
+    <td> 
+      <div align="center"><font face="Courier New, Courier, mono"></font></div>
+    </td>
+    <td>&nbsp;</td>
+  </tr>
+  <tr valign="top"> 
+    <td><font face="Courier New, Courier, mono"></font></td>
+    <td> 
+      <div align="center"><font face="Courier New, Courier, mono"></font></div>
+    </td>
+    <td>&nbsp;</td>
+  </tr>
+  <tr valign="top"> 
+    <td><font face="Courier New, Courier, mono"></font></td>
+    <td> 
+      <div align="center"><font face="Courier New, Courier, mono"></font></div>
+    </td>
+    <td>&nbsp;</td>
+  </tr>
+  <tr valign="top"> 
+    <td><font face="Courier New, Courier, mono"></font></td>
+    <td> 
+      <div align="center"><font face="Courier New, Courier, mono"></font></div>
+    </td>
+    <td>&nbsp;</td>
+  </tr>
+  <tr valign="top"> 
+    <td><font face="Courier New, Courier, mono"></font></td>
+    <td> 
+      <div align="center"><font face="Courier New, Courier, mono"></font></div>
+    </td>
+    <td>&nbsp;</td>
+  </tr>
+</table>
+<hr>
+<font size="-1">Copyright 2002 The Oxford Brookes University, Secure Email Project.<br>
+<a href="http://secemail.brookes.ac.uk" target="_blank">http://secemail.brookes.ac.uk</a></font> 
+<p>&nbsp;</p>

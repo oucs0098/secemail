@@ -1,0 +1,164 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<HTML>
+<HEAD>
+<TITLE>Secure Email Proxy Userguide</TITLE>
+</HEAD>
+<BODY bgcolor="#FFFFFF">
+<table cols=3 width="100%" >
+  <tr> 
+    <td width="12%"><img src="sec-email.gif" border=0 height=100 width=155></td>
+    <td width="75%"> 
+      <center>
+        <h1> Oxford Brookes Secure Email Project</h1>
+      </center>
+    </td>
+    <td><img src="sec-email.gif" border=0 height=100 width=155></td>
+  </tr>
+</table>
+<hr>
+<h2>Userguide</h2>
+<ol>
+  <li><a href="#introduction">Introduction </a> 
+    <ol>
+      <li><a href="#aboutthisdocument">About this document</a></li>
+      <li><a href="#whatisthesecureemailproxy">What is the Secure Email Proxy</a></li>
+      <li><a href="#releasenotes">Release Notes</a></li>
+      <li><a href="#licence">License Information</a></li>
+    </ol>
+  </li>
+  <li><a href="#usingthesecureemailproxy">Using the Secure Email Proxy</a> 
+    <ol>
+      <li><a href="#startingtheemailproxy">Starting the Email Proxy</a></li>
+      <li><a href="#configuringtheproxy">Configuring the proxy</a></li>
+      <li><a href="#configuringyouremailclient">Configuring your email client</a></li>
+      <li><a href="#generatingakeypair">Generating a keypair</a></li>
+    </ol>
+  </li>
+  <li><a href="#keymanagement">Key Management </a>
+<ol>
+      <li><a href="#configuringprimarykeysources">Configuring primary key sources</a></li>
+      <li><a href="#generatingakeypair">Generating a keypair</a></li>
+    </ol>
+</li>
+  <li><a href="#troubleshooting">Troubleshooting</a></li>
+	<ol>
+		
+    <li><a href="#ts_cantfindkey">I have a key on my keyring, why can't the proxy 
+      find it?</a></li>
+	</ol>
+</ol>
+<hr>
+<h2><a name="introduction"></a>Introduction</h2>
+<h3><a name="aboutthisdocument"></a>About this document</h3>
+<h3><a name="whatisthesecureemailproxy"></a>What is the Secure Email Proxy</h3>
+<h3><a name="releasenotes"></a>Release Notes</h3>
+<p>The current release notes and change log can be found <a href="ReleaseNotes.txt">here</a>.</p>
+<h3><a name="licence"></a>License Information</h3>
+<p>The Secure Email Proxy is released under the Gnu Public License (GPL). The 
+  full license can be found <a href="gpl.txt">here</a>.</p>
+<hr>
+<h2><a name="usingthesecureemailproxy"></a>Using the Secure Email Proxy </h2>
+<h3><a name="startingtheemailproxy"></a>Starting the Email Proxy</h3>
+<p>If you have downloaded the release JAR file, you can start the email proxy 
+  by the following command:</p>
+<p align="center"> <font face="Courier New, Courier, mono">java -jar SecureEmailProxy-xxxxxxx.jar 
+  <i>[options] [flags]</i> </font></p>
+<p>e.g. the command</p>
+<p align="center"><font face="Courier New, Courier, mono">java -jar SecureEmailProxy-1.0.0.jar 
+  /? </font></p>
+<p>Will display some useful help information.</p>
+<p>Note: The Email Proxy is designed to be run locally on a per user basis and 
+  currently is not designed to be installed as a multi-user server. The project 
+  does have plans to release a server version in the not to distant future.</p>
+<h3><a name="configuringtheproxy"></a>Configuring the proxy</h3>
+<p>Most configuration data is saved and loaded from a text configuration file 
+  (by default called &quot;<font face="Courier New, Courier, mono">EmailProxy.dat</font>&quot;). 
+  You can either modify these settings using a text editor or by using the Email 
+  Proxy GUI (recommended). </p>
+<p>A list of available configuration settings and their default values can be 
+  found <a href="SystemConfigurationSettings.html">here</a>.</p>
+<ol>
+  <li>
+    Configure the proxy. You must configure the ports the 
+      proxy will listen for your mail client on, see below.
+  </li>
+  <li>By default the proxy requires a SMTP AUTH connection for security reasons. 
+    You should enter a user name and password. Note that this is for the PROXY 
+    only, to use this option your mail server DOES NOT have to support SMTP AUTH 
+    logins (but your mail client must). For security reasons it is STRONGLY RECOMMENDED 
+    that you keep this option enabled if you are running on a multi-user operating 
+    system like UNIX.
+	<p align="center"><img src="proxy_listenports.jpg" width="350" height="397"></p>
+</li>
+  <li>Enter the details of the <i>actual</i> mail server. If your mail server 
+    requires an SMTP AUTH login, enter this information as well (most servers 
+    don't require this).
+    <p align="center"><img src="proxy_mailserver.jpg" width="350" height="397"></p>
+  </li>
+  <li>Configure your encryption algorithm preferences.
+    <p align="center"><img src="proxy_openpgp.jpg" width="350" height="397"></p>
+</li>
+</ol>
+<h3><a name="configuringyouremailclient"></a>Configuring your email client</h3>
+<p>The steps shown here show how to configure Outlook Express to use the proxy. 
+  The steps will be pretty much the same in other email clients. I have assumed 
+  that you have already got an email address from your ISP (note, you can not 
+  use the proxy with web based email systems such as Hotmail).</p>
+<ol>
+  <li>If you haven't already done so, start Outlook Express and create a new email 
+    account (&quot;tools--&gt; Accounts...&quot;, &quot;Add--&gt;Mail...&quot;).</li>
+  <li>Enter your user name and email address (note, you should use the same name 
+    and address that you used to generate your key pair).<br>
+    <p align="center"><img src="config_name.jpg" width="400" height="324"> 
+    <p align="center"><img src="config_address.jpg" width="400" height="324"> 
+    <p>&nbsp;</p>
+  </li>
+  <li>In the incoming and outgoing mail server section enter the name &quot;localhost&quot;, 
+    see below. 
+    <p align="center"><img src="config_mailservers.jpg" width="400" height="324"></p>
+  </li>
+  <li>Enter your mail server user and password information. 
+    <p align="center"><img src="config_password.jpg" width="400" height="324"></p>
+  </li>
+  <li>If you have configured the proxy to listen to a port other than the default, 
+    you will have to tell your mail client to connect to localhost using a different 
+    port. </li>
+  <li>If you have enabled proxy server SMTP AUTH logins (<a href="#configuringtheproxy">see 
+    above</a>) you should enter the login and password information into the mail 
+    client. <p align="center"><img src="config_smtpauth.jpg" width="400" height="383"></p></li>
+</ol>
+<hr>
+<h2><a name="keymanagement"></a>Key Management</h2>
+<h3><a name="configuringprimarykeysources"></a>Configuring primary key sources</h3>
+<p align="center"><img src="keymanage_primary.jpg" width="400" height="365"></p>
+<p align="left">When the proxy looks for a public or a private key, it will search 
+  the local key file first. The local files are where keys generated by the proxy 
+  (<a href="#generatingakeypair">below</a>) are stored.</p>
+<h3><a name="generatingakeypair"></a>Generating a keypair</h3>
+<ol>
+  <li>Enter your user id and address (the same information as you entered in the 
+    <a href="#configuringyouremailclient">previous section</a>).</li>
+  <li>Enter your algorithm preferences.</li>
+  <li>Enter a passphrase. This should be fairly long but easy for you to remember. 
+    It is strongly recommended that you don't use the same passphrase as you entered 
+    anywhere else.</li>
+</ol>
+<hr>
+<h2><a name="troubleshooting"></a>Troubleshooting</h2>
+<h3><a name="ts_cantfindkey"></a>I have a key on my keyring, why can't the proxy 
+  find it?</h3>
+<p>The email proxy uses the name and email address of the sender and recipients 
+  stored in the actual email to find the corresponding key in the keyring.</p>
+<p>This search is case sensitive.</p>
+<p>So, for example, if your signing key has the ID of &quot;<font face="Courier New, Courier, mono">Joe 
+  Bloggs &lt;joe@example.com&gt;</font>&quot; your ID and email address must be 
+  specified as &quot;Joe Bloggs&quot; and &quot;joe@example.com&quot; respectively 
+  in your mail client.</p>
+<p>Likewise, recipient names and addresses in your address book must be the same 
+  as the recipients name and addresses in their public keys.</p>
+<hr>
+<font size="-1">Copyright 2002 The Oxford Brookes University, Secure Email Project.<br>
+<a href="http://secemail.brookes.ac.uk" target="_blank">http://secemail.brookes.ac.uk</a></font> 
+</BODY>
+</HTML>

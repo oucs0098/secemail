@@ -1,0 +1,165 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<HTML>
+  <HEAD>
+    <TITLE>Secure Email Proxy Architecture Overview</TITLE>
+  </HEAD>
+  
+<BODY bgcolor="#FFFFFF">
+<table cols=3 width="100%" >
+  <tr> 
+    <td width="12%"><img src="sec-email.gif" border=0 height=100 width=155></td>
+    <td width="75%"> 
+      <center>
+        <h1> Oxford Brookes Secure Email Project</h1>
+      </center>
+    </td>
+    <td><img src="sec-email.gif" border=0 height=100 width=155></td>
+  </tr>
+</table>
+<hr>
+<h2></h2>
+<h2>Secure Email Proxy</h2>
+<ol>
+  <li><a href="#introduction">Introduction</a> 
+    <ol>
+      <li><a href="#aboutthisdocument">About this document</a></li>
+      <li><a href="#findingmoreinformation">Finding more information</a></li>
+    </ol>
+  </li>
+  <li><a href="#emailproxyoverview">Email Proxy Overview</a></li>
+  <li><a href="#programarchitecture">Program Architecture</a> 
+    <ol>
+      <li><a href="#overview">Overview</a></li>
+      <li><a href="#emailpipes">Email Pipes</a> 
+        <ol>
+          <li><a href="#algorithmhandlers">Algorithm handlers</a></li>
+          <li><a href="#keyhandlers">Key handlers</a></li>
+        </ol>
+      </li>
+    </ol>
+  </li>
+</ol>
+<hr>
+<h2><a name="introduction"></a>Introduction</h2>
+<h3><a name="aboutthisdocument"></a>About this document</h3>
+<p>This document is intended as a brief introduction to the architecture and construction 
+  of the Secure Email Proxy. </p>
+<p>It is intended to complement the Javadoc generated documentation to allow new 
+  programmers on the project to orient themselves quickly.</p>
+<h3><a name="findingmoreinformation"></a>Finding more information</h3>
+<p>The most up-to-date project documentation can be found on the project website 
+  (<a href="http://secemail.brookes.ac.uk" target="_blank">http://secemail.brookes.ac.uk</a>). 
+</p>
+<p>The project's lead developer is currently Marcus Povey &lt;<a href="mailto:mpovey@brookes.ac.uk">mpovey@brookes.ac.uk</a>&gt;</p>
+<h2><a name="emailproxyoverview"></a>Email Proxy Overview</h2>
+<p>Instead of using plugins for differing email clients the email proxy sits on 
+  the client machine between the email client and email server and performs the 
+  necessary encryption, decryption, signing, authorisation and key management 
+  depending on how it is configured.</p>
+<p align="center"><img src="ep-1.jpg" width="335" height="203"></p>
+<p align="left">The users email client is set to point to the email proxy, which 
+  will in turn point to a conventional POP3 and SMTP server (currently we are 
+  not proxying IMAP) and a public Key server for the users organisation. </p>
+<p align="left">When the user wishes to send an email they merely write the email 
+  as normal and press the send button. This email is sent to the proxy which examines 
+  the message and extracts the recipients email address. The proxy then automatically 
+  retrieves the recipients public key from the key server and uses that to encrypt 
+  the message. Optionally the user can set up the proxy to digitally sign all 
+  their email using their private key. </p>
+<p align="left">Receiving email works in a similar manner. The recipients private 
+  key is used to decrypt the email and the email checked for a digital signature. 
+  If there is a signature, the senders public key is retrieved from the public 
+  key server and used to validate the message.</p>
+<h2 align="left"><a name="programarchitecture"></a>Program Architecture</h2>
+<h3><a name="overview"></a>Overview</h3>
+<p>The Email Proxy consists of the following main sections:</p>
+<p><b><u>High Level</u></b></p>
+<ul>
+  <li><b>User Interface</b> - A wrapper around the API that provides a user friendly 
+    way of controlling and configuring the proxy. UI dialogs will be created by 
+    various other parts of the Email Proxy system. The design of the UI will change 
+    based on user feedback.</li>
+  <li><b>Email Pipes</b> - These represent the core functionality of the Email 
+    Proxy. They handle mail transport between the email client and the email server 
+    and call on the cryptography, signing and key handling API where appropriate. 
+    The email pipes call on UI elements as part of their operation - error messages, 
+    dialog boxes etc...</li>
+</ul>
+<p><b><u>Low Level</u></b></p>
+<ul>
+  <li><b>Email protocol handlers</b> - Provide support for various email protocols 
+    and abstract them to a common internal language. This allows the email pipes 
+    to look for key events during email transfer and to catch errors. See the 
+    <i>core.protocolhandlers</i> and <i>core.iptp</i> packages for more details.</li>
+  <li><b>Key handlers </b>- The key handler API. Provides a common interface for 
+    retrieving key material from a number of different sources. See the <i>core.keyhandlers</i> 
+    package for more details.</li>
+  <li><b>Algorithm handlers</b> - The cryptography API. Currently only OpenPGP 
+    is support (and realistically this is all that is likely to be needed). See 
+    the <i>core.algorithmhandlers</i> package for more details.</li>
+</ul>
+<p>The high level sections make up the application that controls the low level 
+  sections. It should be a fairly simple matter to implement other applications 
+  using the low level API (with hopefully only a minumum of code refinement); 
+  for example, a multi-user proxy or a plugin for a webmail system. </p>
+<h3><a name="emailpipes"></a>Email Pipes</h3>
+<p align="center"><img src="ep-2.jpg" width="550" height="183"></p>
+<p>There are two email pipes in the proxy, one handling outgoing messages and 
+  another handling incoming messages. </p>
+<p>Each pipe is constructed out of a number of objects that will act in turn on 
+  a message, for example objects to encrypt and sign a message (in the case of 
+  the outgoing pipe) or to decrypt and verify a message (in the case of the incoming 
+  pipe).</p>
+<p>At either end of the pipe is an object that converts to an from the email protocol 
+  (SMTP, POP3 etc) and an internal protocol. This internal protocol provides an 
+  abstract way to watch for key events in the email exchange as well as a protocol 
+  independent way to catch errors.</p>
+<p>Each pipe runs concurrently on its own thread. Once started the pipe listens 
+  on a given port for the email client to begin a transaction.</p>
+<p>For most of the time, commands from the client are simply relayed to the server 
+  and the response relayed back. Certain events however require the proxy take 
+  special action. </p>
+<p>Some actions require that the email client and email server be &quot;decoupled&quot; 
+  until some later point in the exchange, this means that in certain cases (for 
+  example when the email client begins sending an email) the email proxy pretends 
+  to be the email server and &quot;fakes&quot; an exchange before performing some 
+  processing and sending the final result to the email server.</p>
+<p>Another place where the exchange is decoupled is during the initial SMTP-AUTH 
+  login.</p>
+<p>Here is a diagram showing the interaction between email client, proxy and server 
+  during a typical outgoing mail exchange...</p>
+<p align="center"><img src="ep-3.gif"></p>
+<h4 align="left"><a name="algorithmhandlers"></a>Algorithm handlers</h4>
+<p align="left">An algorithm handler represents the core functionality of the 
+  Secure Email Proxy and contains all the cryptographic routines. Currently there 
+  is only an algorithm handler available for OpenPGP.</p>
+<p align="left"> The OpenPGP handler is passed a list of key sources and passphrases 
+  together with an email. This is processed and the result returned. </p>
+<p align="left">When email is sent through the proxy, it is intercepted and constructed 
+  into an Email object. This, in turn, is passed to the algorithm handler.</p>
+<p align="left">The handler examines the email and extracts the recipient addresses 
+  (and sender address if the signing option is set). These addresses are used 
+  in the key search.</p>
+<p align="left">The handler will search for the corresponding key in each registered 
+  key store in turn. If a matching key is found it is returned, otherwise an exception 
+  is thrown. </p>
+<p align="left">If the key is a secret key then the handler will try each registered 
+  pass phrase in turn. If no pass phrase could be found that decodes the secret 
+  key data an exception is thrown. The email pipe catches this exception and prompts 
+  the user to enter a new pass phrase.</p>
+<p align="left">Processing of incoming email is pretty much the exact reverse 
+  of the outgoing mail process, except keys are searched for by Key ID and not 
+  User ID. Also, a log is attached to the email.</p>
+<h4 align="left"><a name="keyhandlers"></a>Key handlers</h4>
+<p align="left">Key handlers provide a common API for accessing and querying key 
+  stores. This allows the Secure Email Proxy to be extended to obtain keys from 
+  diverse key sources, including more exotic sources like HTTP key servers.</p>
+<p align="left">Currently, all key sources can either be a file or a server, and 
+  extend the classes KeyFile and KeyServer respectively. </p>
+<hr>
+<font size="-1">Copyright 2002 The Oxford Brookes University, 
+Secure Email Project.<br>
+<a href="http://secemail.brookes.ac.uk" target="_blank">http://secemail.brookes.ac.uk</a></font> 
+</BODY>
+</HTML>

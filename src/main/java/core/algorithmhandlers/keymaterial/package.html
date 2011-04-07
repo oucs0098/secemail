@@ -1,0 +1,35 @@
+<BODY>
+<p>A package containing descriptions of various classes that encapsulate the parameters
+  to the public key encryption / signature algorithms.</p>
+<p><b><u>Adding a new algorithm to OpenPGP</u></b></p>
+<p>Adding support for a new public key algorithm is a fairly involved process
+  unfortunately. If one were to write a new version of the API it might be worth
+  redesigning the way PK algorithms are integrated. Anyway, the steps are as follows...</p>
+<ol>
+  <li>Add the appropriate entries to {@link core.algorithmhandlers.openpgp.util.PublicKeyAlgorithmSettings}</li>
+  <li>Create a class in this package that implements the new algorithm. This must 
+    extend the abstract class {@link core.algorithmhandlers.keymaterial.AsymmetricAlgorithmParameters}. 
+    Look at {@link core.algorithmhandlers.keymaterial.RSAAlgorithmParameters} 
+    for an example implementation.</li>
+  <li>Add your instantiation to the switch statement in {@link core.algorithmhandlers.openpgp.packets.KeyPacket#buildKeyPacketFromStream(InputStream)}.</li>
+  <li>If the algorithm supports encryption, modify {@link core.algorithmhandlers.openpgp.packets.PublicKeyEncryptedSessionKeyPacket#setSessionKey(Key, SessionKey)} and {@link core.algorithmhandlers.openpgp.packets.PublicKeyEncryptedSessionKeyPacket#getSessionKey(Key)} 
+    if necessary. Some algorithms require encrypted data to be parsed to convert 
+    between the data that the JCE algorithm produces and values that PGP understands.</li>
+  <li>If the algorithm supports signing you must add support to {@link core.algorithmhandlers.openpgp.packets.SignatureMaterial#sign(PrivateKey, byte[])} and {@link core.algorithmhandlers.openpgp.packets.SignatureMaterial#verify(PublicKey, byte[])}. Again, some algorithms require the encrypted data to be parsed to 
+    convert between the data that the JCE produces and the values that PGP understands</li>
+  <li>If necessary modify the {@link core.algorithmhandlers.openpgp.packets.KeyPacket#getFingerprint} 
+    and {@link core.algorithmhandlers.openpgp.packets.KeyPacket#getKeyID} methods 
+    in {@link core.algorithmhandlers.openpgp.packets.KeyPacket}</li>
+  <li>Add the appropriate code to {@link ui.OpenPGPKeyManager#generateKey} to 
+    catch the user's key generation preference.</li>
+  <li>Add the appropriate key generation routines to {@link ui.KeyGenStatusDlg.KeyGenerator#run()}</li>
+  <li>Finally, if you want the algorithm to be selectable you should add it to 
+    the UI's list of available algorithms. In order for the settings file to be 
+    generated with the correct list of defaults you will need to add your new 
+    algorithm to the list of defaults for every reference to "openpgp.signaturealgorithm.available" 
+    and/or "openpgp.pkalgorithm.available" in the settings file. Don't forget 
+    to modify <a href="{@docRoot}/app/doc-files/SystemConfigurationSettings.html">SystemConfigurationSettings.html</a> 
+    to reflect these changes.</li>
+</ol>
+@author Marcus Povey 
+</BODY>

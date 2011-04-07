@@ -1,0 +1,15 @@
+About
+
+  Since this project was last in development the OpenPGP candidate standard (see RFC 2440) has evolved in line with security developments and added features, in the form of 'bis' update documents. 
+  The implementing PGP and GnuPG programs have been enhanced in line with the updates, which include changes in the interests of security.
+  This has meant that there are increasing discrepancies between the up-to-date OpenPGP implementations and the implementations that rely on the original 1998 RFC 2440 standards track document (such as the original Secure Email proxy).
+  In practice this leads to some packets originating from recent versions of PGP and GnuPG being misinterpreted by the proxy.
+  This work on the Secure Email project is intended to update the Secure Email proxy source and extend the original Secure Email proxy by adding key management features. With luck the changes will be accepted into the original Secure Email Proxy source.
+
+Background
+
+  This project is a work in progress. The project would not have been possible without the original work that went into the {{{http://secemail.brookes.ac.uk}Brookes Secure Email Project}}.
+
+This Site
+
+  This site is being maintained to provide information about the SecEmail project and its progress.

@@ -1,0 +1,3 @@
+openpgp.keystore.model.keyhandlers.OpenPGPHKPPublicKeyServer
+openpgp.keystore.model.keyhandlers.OpenPGPAsciiPublicKeyFile
+openpgp.keystore.model.keyhandlers.OpenPGPPublicKeyringFile

@@ -1,0 +1,12 @@
+<body>
+    <p>Provides a protocol representing a generic proxy internal command structure.</p>
+    <p>The package provides a set of commands and responses that give the proxy server pipes
+       an abstract protocol independent way of watching the mail exchange and performing actions
+       in response to key events.</p>
+    <p>It is up to the specific protocol handler to convert to and from IPTP and the native
+       mail protocol, throwing a {@link core.exceptions.NoMappingPossibleException NoMappingPossibleException} if
+       no safe mapping is possible.</p>
+    <p>You may extend the command classes if you wish, but you must not change the core functionality.</p>
+    @see <a href="doc-files/IPTPv1.html">IPTP v1 Specification</a>
+    @author Marcus Povey
+</body>

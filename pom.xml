@@ -1,0 +1,101 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>org.secemail</groupId>
+  <artifactId>secemail-core</artifactId>
+  <packaging>jar</packaging>
+  <version>1.0-SNAPSHOT</version>
+  <name>secemail-core</name>
+  <description>The Secure Email Proxy is a Java application intended for personal use that will transparently encrypt/decrypt/sign/verify email sent through it using the OpenPGP message format.</description>
+  <url>http://www.secemail.org</url>
+
+  <scm>
+    <connection>scm:git:git://github.com/catfu/secemail.git</connection>
+    <developerConnection>scm:git:git://github.com/catfu/secemail.git</developerConnection>
+    <url>https://catfu@github.com/catfu/secemail.git</url>
+  </scm>
+
+  <organization>
+    <name>Puzzle Tree</name>
+    <url>http://puzzletree.net</url>
+  </organization>
+
+  <developers>
+    <developer>
+      <organization>Secure Email Project</organization>
+      <organizationUrl>http://puzzletree.net/</organizationUrl>
+      <email>puzzletree@rocketmail.com</email>
+      <name>Nigel Brown</name>
+      <roles>
+        <role>Developer</role>
+      </roles>
+      <timezone>0</timezone>
+    </developer>
+  </developers>
+
+  <licenses> 
+    <license> 
+      <name>The GNU GPL, Version 2.0</name> 
+      <url>http://www.gnu.org/licenses/gpl-2.0.html</url> 
+      <distribution>repo</distribution> 
+    </license> 
+  </licenses> 
+
+  <issueManagement>
+    <url>https://github.com/catfu/secemail/issues</url> 
+  </issueManagement>
+
+  <dependencies>
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>3.8.1</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>bouncycastle</groupId>
+      <artifactId>bcprov-jdk15</artifactId>
+      <version>135</version>
+      <scope>compile</scope>
+    </dependency>
+    <dependency>
+      <groupId>log4j</groupId>
+      <artifactId>log4j</artifactId>
+      <version>1.2.14</version>
+      <scope>compile</scope>
+    </dependency>
+  </dependencies>
+
+  <reporting>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-project-info-reports-plugin</artifactId>
+      </plugin>
+    </plugins>
+  </reporting> 
+
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-scm-plugin</artifactId>
+        <version>1.0-beta-4</version>
+        <configuration>
+          <connectionType>developerConnection</connectionType>
+        </configuration>
+      </plugin>
+    </plugins>
+    <resources>
+      <resource>
+        <directory>src/main/resources</directory>
+        <filtering>true</filtering>
+      </resource>
+    </resources>
+  </build>
+
+  <distributionManagement>
+    <status>none</status>
+  </distributionManagement>
+
+</project>

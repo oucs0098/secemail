@@ -1,0 +1,404 @@
+<html>
+<head>
+<title>IPTP (Internal Proxy Translation Protocol) v1</title>
+</head>
+<body bgcolor="#FFFFFF">
+<h1>Internal Proxy Translation Protocol (IPTP)</h1>
+<h2>
+  <hr align="CENTER">
+  <table border="0" width="100%">
+    <tr valign="top">
+      <td width="16%">
+        <h5>Module Name: </h5>
+      </td>
+      <td width="38%">
+        <h3><font size="4">Secure Email Proxy</font></h3>
+      </td>
+      <td width="15%">
+        <h5>Author: </h5>
+      </td>
+      <td width="31%">
+        <h3>Marcus Povey</h3>
+      </td>
+    </tr>
+    <tr valign="top">
+      <td width="16%">
+        <h5>Module Sub Section: </h5>
+      </td>
+      <td width="38%">
+        <h3>Internal Proxy Translation Protocol (IPTP)</h3>
+      </td>
+      <td width="15%">
+        <h5>Version/Date: </h5>
+      </td>
+      <td width="31%">
+        <h3>v1.0 10/5/2002</h3>
+      </td>
+    </tr>
+    <tr valign="top">
+      <td width="16%">&nbsp;</td>
+      <td width="38%">&nbsp;</td>
+      <td width="15%">&nbsp;</td>
+      <td width="31%">
+        <h5>[<a href="#intro">Introduction</a> | <a href="#spec">Specification</a>
+          | <a href="#enhancements">Future enhancements</a>] </h5>
+      </td>
+    </tr>
+    <tr valign="top">
+      <td width="16%">
+        <h5>Intended audience: </h5>
+      </td>
+      <td width="38%">
+        <h5>SecEmail core group</h5>
+      </td>
+      <td width="15%">
+        <h5>Related Links: </h5>
+      </td>
+      <td width="31%">
+        <h5>[ <a href="http://www.faqs.org/rfcs/rfc821.html" target="_blank">RFC821
+          (SMTP)</a> | <a href="http://www.faqs.org/rfcs/rfc1939.html" target="_blank">RFC1939
+          (POP3)</a> | <a href="http://www.faqs.org/rfcs/rfc1734.html" target="_blank">RFC1734
+          (POP3 Auth)</a> ] </h5>
+      </td>
+    </tr>
+  </table>
+  <hr align="CENTER">
+  <font face="Times New Roman"><a name="intro"></a>Introduction</font> </h2>
+<p>IPTP is a way to abstract away from the low level native mail protocols (SMTP,
+  POP3 etc) so that the proxy server can watch for key events during mail transfer,
+  while having the facility to extend the protocol to include more commands and
+  support more mail protocols without too much effort.</p>
+<p>Translation between protocols might be a future enhancement, however adding
+  support for a new protocol should be a matter of writing the appropriate protocol
+  handler and extending IPTP when appropriate.</p>
+<h3>Key points</h3>
+<ul>
+  <li>Abstract. Commands consist of key elements to perform the command. It does
+    not contain any protocol specific text. (Well, that isn't quite true, one
+    command does, but that will be discussed later).</li>
+  <li>The mapping to and from the native internet mail protocol and IPTP is left
+    to the protocol handlers.</li>
+  <li>IPTP consists of a selection of command classes which are all derived from
+    IPTPCommand, and a set of corresponding response classes derived from IPTPCommandResponse.</li>
+  <li>In the protocol handlers and email pipes commands are tested for with the
+    instanceof operator. This gives people the opportunity of extending a given
+    command to carry extra information or to have extra functionality and it'll
+    still function, provided they the core functionality remains unchanged.</li>
+  <li>Commands and responses are all decended from root lasses which contain basic
+    functionality such as version and in the case of command responses a success
+    code (was the command successful or not).</li>
+  <li>For responses to work correctly the protocol handler must send the correct
+    response class back. Therefore it must retain a note of the last command sent
+    to the email server.</li>
+  <li>Currently IPTP only maps a few key commands. All other commands are dumbly
+    relayed using the IPTPRelay and IPTPRelayResponse command.</li>
+</ul>
+<h2><a name="spec"></a>Specification</h2>
+<h3>Commands</h3>
+<table width="100%" border="1">
+  <tr valign="top"> 
+    <th> 
+      <div align="center">Command</div>
+    </th>
+    <th>Description</th>
+    <th>Remarks</th>
+  </tr>
+  <tr valign="top"> 
+    <td> 
+      <div align="center"><font face="Courier New, Courier, mono">IPTPUser(<i>String 
+        userid</i>)</font></div>
+    </td>
+    <td>User name identification</td>
+    <td> 
+      <p>Log into the mail server. Specific command is provided so that the proxy 
+        server could use this information to log into the key server or something.</p>
+      <p>Or it could be used to obtain a kerberos key to proxy KPOP.</p>
+    </td>
+  </tr>
+  <tr valign="top"> 
+    <td> 
+      <div align="center"><font face="Courier New, Courier, mono">IPTPPass(<i>String 
+        passcode</i>)</font></div>
+    </td>
+    <td>User passcode identification</td>
+    <td> 
+      <p>Log into the mail server. Specific command is provided so that the proxy 
+        server could use this information to log into the key server or something.</p>
+      <p>Or it could be used to obtain a kerberos key to proxy KPOP.</p>
+    </td>
+  </tr>
+  <tr valign="top"> 
+    <td> 
+      <div align="center"> 
+        <p><font face="Courier New, Courier, mono">IPTPList()</font></p>
+        <p><font face="Courier New, Courier, mono">IPTPList(<i>int messno</i>)</font></p>
+      </div>
+    </td>
+    <td>Request a scan listing from the server.</td>
+    <td> 
+      <p>If the command is sent with no parameters, a multiline listing should 
+        be returned.</p>
+      <p>If a message number is given, then a single line scan listing is returned 
+        giving the details of the email.</p>
+      <p>This is a bit of a kludge and is likely to be replaced in later versions 
+        of this protocol.</p>
+    </td>
+  </tr>
+  <tr valign="top"> 
+    <td> 
+      <div align="center"> 
+        <p><font face="Courier New, Courier, mono">IPTPUidl()</font></p>
+        <p><font face="Courier New, Courier, mono">IPTPUidl(<i>int messno</i>)</font></p>
+      </div>
+    </td>
+    <td>Request a unique id scan listing from the server.</td>
+    <td> 
+      <p>If the command is sent with no parameters, a multiline listing should 
+        be returned.</p>
+      <p>If a message number is given, then a single line scan listing is returned 
+        giving the details of the email.</p>
+      <p>This is a bit of a kludge and is likely to be replaced in later versions 
+        of this protocol.</p>
+    </td>
+  </tr>
+  <tr valign="top"> 
+    <td> 
+      <div align="center"><font face="Courier New, Courier, mono">IPTPRetr(<i>int 
+        messageno</i>)</font></div>
+    </td>
+    <td>Request a given message from the mail server.</td>
+    <td>As far as the proxy is concerned only the command part is important, since 
+      no email is stored on the proxy. 
+      <p>This command informs the proxy that mail transfer is about to begin, 
+        and that the next response from the server will either contain the size 
+        of the email and email contents, or an error.</p>
+      <p>The email is processed, (size information should be altered), and then 
+        relayed to the client.</p>
+    </td>
+  </tr>
+  <tr valign="top"> 
+    <td> 
+      <div align="center"><font face="Courier New, Courier, mono">IPTPMail(<i>String 
+        sender</i>)</font></div>
+    </td>
+    <td>Begin sending an email to the mail server, provides the address of the 
+      sender.</td>
+    <td>Informs the proxy server that email is about to be sent, and also provides 
+      the return path information.</td>
+  </tr>
+  <tr valign="top"> 
+    <td> 
+      <div align="center"><font face="Courier New, Courier, mono">IPTPRcpt(<i>String 
+        recipient</i>)</font></div>
+    </td>
+    <td>Add a recipient address to the email.</td>
+    <td>Add a recipient address to the message. This information could be used 
+      to query to the key server to retrieve public key information.</td>
+  </tr>
+  <tr valign="top"> 
+    <td> 
+      <div align="center"><font face="Courier New, Courier, mono">IPTPData()</font></div>
+    </td>
+    <td>Request the email server's permission to send an email.</td>
+    <td> 
+      <p>This does nothing terribly spectacular. Requests permission to send an 
+        email through the server. Informs the proxy server that an email is about 
+        to be sent.</p>
+      <p>This command can not simply be relayed since at this point the proxy 
+        server must fake the exchange with the email server.</p>
+    </td>
+  </tr>
+  <tr valign="top"> 
+    <td> 
+      <div align="center"><font face="Courier New, Courier, mono">IPTPSendData(<i>String 
+        message</i>)</font></div>
+    </td>
+    <td>Send an email.</td>
+    <td> 
+      <p>This command sends an email which is intercepted by the proxy server, 
+        encrypted / signed, and then sent to the email server together with the 
+        recipients etc. </p>
+      <p>A final success code is then sent back to the client.</p>
+      <p>This is a special command. In SMTP the Send Data command is denoted by 
+        context rather than an actual command. awaitCommand can not reliably test 
+        for it (since it is syntactically identical to IPTPRelay) unless a record 
+        of the last command received is stored. Instead, it is constructed internally 
+        by the OutgoingEmailPipe.</p>
+    </td>
+  </tr>
+  <tr valign="top"> 
+    <td> 
+      <div align="center"><font face="Courier New, Courier, mono">IPTPQuit()</font></div>
+    </td>
+    <td>Inform the proxy server that the client wishes to quit.</td>
+    <td>Necessary to inform the server to drop connection to client and server.</td>
+  </tr>
+  <tr valign="top"> 
+    <td> 
+      <div align="center"><font face="Courier New, Courier, mono">IPTPRelay(<i>String 
+        rawcommand</i>)</font></div>
+    </td>
+    <td>Dumb relay.</td>
+    <td> 
+      <p>Relays the raw protocol stream to the mail server. This is essentially 
+        a &quot;misc&quot; command for handling anything not listed in the above.</p>
+      <p>This will be depreciated in later IPTP releases in favour of mapping 
+        the internet protocol completely.</p>
+    </td>
+  </tr>
+</table>
+<h3>Command Responses</h3>
+<table width="100%" border="1">
+  <tr valign="top"> 
+    <th> 
+      <div align="center">Command</div>
+    </th>
+    <th>Description</th>
+    <th>Remarks</th>
+  </tr>
+  <tr valign="top"> 
+    <td> 
+      <div align="center"><font face="Courier New, Courier, mono">IPTPUserResponse(<i>boolean 
+        isok</i>)</font></div>
+    </td>
+    <td>Was the command accepted by the mail server.</td>
+    <td>&nbsp;</td>
+  </tr>
+  <tr valign="top"> 
+    <td> 
+      <div align="center"><font face="Courier New, Courier, mono">IPTPPassResponse(<i>boolean 
+        isok</i>)</font></div>
+    </td>
+    <td>Was the command accepted by the mail server.</td>
+    <td>&nbsp;</td>
+  </tr>
+  <tr valign="top"> 
+    <td> 
+      <div align="center"> 
+        <p><font face="Courier New, Courier, mono">IPTPListResponse(<i>boolean 
+          isok</i>)</font></p>
+        <p><font face="Courier New, Courier, mono">IPTPListResponse(<i>boolean 
+          isok, String scanlst</i>)</font></p>
+      </div>
+    </td>
+    <td>Was the command successful.</td>
+    <td>If the command was successful, a single or multi line scan listing is 
+      returned (depending on the previous command).</td>
+  </tr>
+  <tr valign="top"> 
+    <td> 
+      <div align="center"> 
+        <p><font face="Courier New, Courier, mono">IPTPUidlResponse(<i>boolean 
+          isok</i>)</font></p>
+        <p><font face="Courier New, Courier, mono">IPTPUidlResponse(<i>boolean 
+          isok, String scanlst</i>)</font></p>
+      </div>
+    </td>
+    <td>Was the command successful.</td>
+    <td>If the command was successful, a single or multi line unique id scan listing 
+      is returned (depending on the previous command).</td>
+  </tr>
+  <tr valign="top"> 
+    <td> 
+      <div align="center"><font face="Courier New, Courier, mono">IPTPRetrResponse(<i>boolean 
+        isok, integer octets, String message</i>)</font></div>
+    </td>
+    <td> 
+      <p>Returns a success code. </p>
+    </td>
+    <td> 
+      <p>If the command was successful the command also returns the email and 
+        its size.</p>
+      <p>If the command was unsuccessful, size will be 0 and message will be null.</p>
+    </td>
+  </tr>
+  <tr valign="top"> 
+    <td> 
+      <div align="center"><font face="Courier New, Courier, mono">IPTPMailResponse(<i>boolean 
+        isok</i>)</font></div>
+    </td>
+    <td>Was the command accepted.</td>
+    <td>Response to the command is &quot;faked&quot; by the proxy server so that 
+      the client continues with the transaction.</td>
+  </tr>
+  <tr valign="top"> 
+    <td> 
+      <div align="center"><font face="Courier New, Courier, mono">IPTPRcptResponse(<i>boolean 
+        isok</i>)</font></div>
+    </td>
+    <td>Was the command accepted.</td>
+    <td>Response to the command is &quot;faked&quot; by the proxy server so that 
+      the client continues with the transaction.</td>
+  </tr>
+  <tr valign="top"> 
+    <td> 
+      <div align="center"><font face="Courier New, Courier, mono">IPTPDataResponse(<i>boolean 
+        isok</i>)</font></div>
+    </td>
+    <td>Was the command accepted.</td>
+    <td>Response to the command is &quot;faked&quot; by the proxy server so that 
+      the client continues with the transaction.</td>
+  </tr>
+  <tr valign="top"> 
+    <td> 
+      <div align="center"><font face="Courier New, Courier, mono">IPTPSendDataResponse(<i>boolean 
+        isok</i>)</font></div>
+    </td>
+    <td>Was the command accepted.</td>
+    <td>Response to the command is &quot;faked&quot; by the proxy server so that 
+      the client continues with the transaction.</td>
+  </tr>
+  <tr valign="top"> 
+    <td> 
+      <div align="center"><font face="Courier New, Courier, mono">IPTPQuit(<i>boolean 
+        isok</i>)</font></div>
+    </td>
+    <td>Disconnect from client and server.</td>
+    <td>&nbsp;</td>
+  </tr>
+  <tr valign="top"> 
+    <td> 
+      <div align="center"><font face="Courier New, Courier, mono">IPTPRelayResponse(<i>boolean 
+        isok, String rawresponse</i>)</font></div>
+    </td>
+    <td>Return a success code and the raw response from the server.</td>
+    <td> 
+      <p>This is essentially a &quot;misc&quot; command for handling anything 
+        not listed in the above.</p>
+      <p>This will be depreciated in later IPTP releases in favour of mapping 
+        the internet protocol completely.</p>
+    </td>
+  </tr>
+</table>
+<h2><a name="enhancements"></a>Future Enhancement</h2>
+<ul>
+  <li>IPTP can be expanded to map more internet mail protocol commands as and
+    when necessary. </li>
+  <li>Add commands for extra authentication, Auth, APOP, KPOP etc</li>
+  <li>Possibly use IPTPPass &amp; IPTPUser commands to obtain a kerberos key to
+    convert a POP3 session transparently into a KPOP session.<br>
+  </li>
+</ul>
+<hr align="CENTER">
+Modifications to this document
+<table border="0" cellpadding="0" width="100%">
+  <tr> 
+    <td><b>Date</b></td>
+    <td><b>Initials</b></td>
+    <td><b>Modification details</b></td>
+  </tr>
+  <tr>
+    <td>5/6/2002</td>
+    <td>MP</td>
+    <td>Uidl command added</td>
+  </tr>
+  <tr> 
+    <td>10/5/2002</td>
+    <td>MP</td>
+    <td>Created.</td>
+  </tr>
+</table>
+Copyright of the author and The Oxford Brookes Secure Email Project 2002, All
+rights reserved.
+</body>
+</html>

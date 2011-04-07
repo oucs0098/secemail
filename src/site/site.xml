@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<project name="Secure Email Project">
+  <bannerLeft>
+    <name>Secure Email Project</name>
+    <src>images/SecureEmailLogo1.png</src>
+    <href>http://www.secemail.org/</href>
+  </bannerLeft>
+  <bannerRight>
+    <src>images/LockedPadlock.png</src>
+  </bannerRight>
+  <body>
+    <links>
+      <item name="The Original Brookes Secure Email Project" href="http://secemail.brookes.ac.uk/"/>
+    </links>
+
+    <menu name="Secure Email Project">
+      <item name="Introduction" href="index.html"/>
+      <item name="Download" href="download.html"/>
+      <item name="Release Notes" href="release-notes.html" />
+      <item name="General Information" href="about.html"/>
+      <item name="Road Map" href="roadmap.html" />
+    </menu>
+
+    <menu ref="reports"/>
+
+  </body>
+</project>
